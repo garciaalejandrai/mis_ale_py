@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import pandas as pd
+import matplotlib.pyplot as plt
+from time import time
+
+time_inicial = time()
+
+datos = pd.read_csv('profeco.csv',header=0)
+#print (datos) #si queremos visualizar los datos
+#print(datos.shape) #numero de renglones y columnas sin contar la fila header
+#print(datos.dtypes)
+
+#vamos a seleccionar las columas de nuestro interes
+dif_dates = datos.groupby("fechaRegistro")
+print "Estas son las diferenctes fechas de registro:"
+print dif_dates.size()
+print"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#en datos_2 se seleccionan los datos a considerar
+#fechaRegistro no se considera un dato relevante 
+datos_2 =datos[['producto','categoria','catalogo','precio','estado']]
+
+#print(datos_2)
+
+#analisis de datos  por cada variable
+
+Grupo1= datos_2.groupby("producto")
+print "Se muestra la cantidad por cada producto"
+print Grupo1.size() 
+print "Lo que se gastó en cada producto"
+print Grupo1.sum()
+print "****************************************"
+
+GrupoCat= datos_2.groupby("catalogo")
+print "Se muestra la cantidad por cada CATALOGO"
+print GrupoCat.size() 
+print "Lo que se gastó en cada CATALOGO"
+print GrupoCat.sum()
+print "****************************************"
+
+Grupo_2 =datos_2.groupby(['catalogo','estado'])
+print Grupo_2.size()
+print "Lo que gasta cada estado por catalogo"
+print Grupo_2.sum()
+print "Los 24 estados que mas gastan son"
+print Grupo_2.sum().sort_values(by='precio')[-24:] 
+gra1=datos_2.groupby(['catalogo','categoria']).sum().sort_values(by='precio')[-15:]
+gra1.plot(kind='bar')
+plt.show()
+
+
+print "****************************************"
+
+print "los 15 registros mas altos"
+print datos_2.groupby(['estado','catalogo']).sum().sort_values(by='precio')[-15:]
+graf=datos_2.groupby(['estado','catalogo']).sum().sort_values(by='precio')[-15:]
+graf.plot(kind='bar')
+plt.show()
+
+time_final = time()
+running_time = time_final - time_inicial
+
+print "El running time fue de ", running_time, "segundos"
