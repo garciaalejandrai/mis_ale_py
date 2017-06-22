@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#PROGRAMA QUE CUENTAS LAS LINEAS DE UN CSV
+#Y CRONOMETRA EL TIEMPO DE EJECUCION
+from time import time
+import csv as csv
+cuenta=0
+
+time_inicial = time()
+
+with open('profeco_ALE.csv') as csvarchivo:
+	entrada = csv.reader(csvarchivo)
+	for fila in entrada:
+		#print(fila)
+		cuenta+=1
+	print "TENEMOS  ", cuenta, "LINEAS"
+
+time_final = time()
+running_time = time_final - time_inicial
+
+print "El running time fue de ", running_time, "segundos"
